@@ -14,4 +14,8 @@ describe('./musicians endpoint', () => {
         const response = await request(app).get("/musicians");
         expect(response.statusCode).toBe(200);
     });
+    test("to return response that isn't null", async () => {
+        const response = await request(app).get("/musicians");
+        expect(JSON.parse(response.text)).not.toBeNull();
+    });
 });
