@@ -5,7 +5,7 @@
 
 const request = require("supertest")
 const { db } = require('./db/connection');
-const { Musician } = require('./models/index')
+const { Band, Musician } = require('./models/index')
 const app = require('./src/app');
 const seedMusician = require("./seedData");
 
@@ -17,5 +17,30 @@ describe('./musicians endpoint', () => {
     test("to return response that isn't null", async () => {
         const response = await request(app).get("/musicians");
         expect(JSON.parse(response.text)).not.toBeNull();
+    });
+    test("to return valid JSON data", async () => {
+        const response = await request(app).get("/musicians");
+        const responseData = JSON.parse(response.text);
+        expect(responseData[0].name).toEqual("Mick Jagger");
+        expect(responseData[1].name).toEqual("Drake");
+        expect(responseData[2].name).toEqual("Jimi Hendrix");
+    });
+});
+
+describe('./bands endpoint', () => {
+    test("to return expected status code", async () => {
+        const response = await request(app).get("/bands");
+        expect(response.statusCode).toBe(200);
+    });
+    test("to return response that isn't null", async () => {
+        const response = await request(app).get("/bands");
+        expect(JSON.parse(response.text)).not.toBeNull();
+    });
+    test("to return valid JSON data", async () => {
+        const response = await request(app).get("/bands");
+        const responseData = JSON.parse(response.text);
+        expect(responseData[0].name).toEqual("The Beatles");
+        expect(responseData[1].name).toEqual("Black Pink");
+        expect(responseData[2].name).toEqual("Coldplay");
     });
 });
