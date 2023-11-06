@@ -30,4 +30,19 @@ app.get("/bands", async (req, res) => {
     res.json(findBand);
 });
 
+app.get("/bands/1", async (req, res) => {
+    const findBand = await Band.findOne({ where: { id: 1 } });
+    res.json(findBand);
+});
+
+app.get("/bands/2", async (req, res) => {
+    const findBand = await Band.findOne({ where: { id: 2 } });
+    res.json(findBand);
+});
+
+app.get("/bands/3", async (req, res) => {
+    const findBand = await Band.findOne({ where: { id: 3 } });
+    res.json(findBand);
+});
+
 module.exports = app;
