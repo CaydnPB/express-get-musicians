@@ -35,6 +35,32 @@ describe('./musicians endpoint', () => {
         const response = await request(app).get(`/musicians/${nonExistentMusicianId}`);
         expect(response.statusCode).toBe(404);
     });
+    it('to create a new musician', async () => {
+        const newMusician = {
+            name: "John Doe",
+            instrument: "Guitar",
+        };
+        const response = await request(app)
+            .post("/musicians")
+            .send(newMusician);
+        const createdMusician = response.body.find(m => m.name === newMusician.name);
+    });
+    it("to update an existing musician", async () => {
+        const musicianId = 1;
+        const updatedMusicianData = {
+          name: 'Updated Name',
+          instrument: 'Updated Instrument',
+        };
+        const response = await request(app)
+          .put(`/musicians/${musicianId}`)
+          .send(updatedMusicianData);
+        const updatedMusician = response.body.find(m => m.id === musicianId);
+    });
+    it('to delete an existing musician', async () => {
+        const musicianId = 1;
+        const response = await request(app).delete(`/musicians/${musicianId}`);
+        const deletedMusician = response.body.find(m => m.id === musicianId);
+    });
 });
 
 describe('./bands endpoint', () => {
@@ -62,5 +88,31 @@ describe('./bands endpoint', () => {
         const nonExistentBandId = 999;
         const response = await request(app).get(`/bands/${nonExistentBandId}`);
         expect(response.statusCode).toBe(404);
+    });
+    it('to create a new band', async () => {
+        const newBand = {
+            name: "John Doe",
+            instrument: "Guitar",
+        };
+        const response = await request(app)
+            .post("/musicians")
+            .send(newBand);
+        const createdBand = response.body.find(m => m.name === newBand.name);
+    });
+    it("to update an existing band", async () => {
+        const bandId = 1;
+        const updatedBandData = {
+          name: 'Updated Name',
+          genre: 'Updated Genre',
+        };
+        const response = await request(app)
+          .put(`/bands/${bandId}`)
+          .send(updatedBandData);
+        const updatedBand = response.body.find(m => m.id === bandId);
+    });
+    it('to delete an existing band', async () => {
+        const bandId = 1;
+        const response = await request(app).delete(`/bands/${bandId}`);
+        const deletedBand = response.body.find(m => m.id === bandId);
     });
 });

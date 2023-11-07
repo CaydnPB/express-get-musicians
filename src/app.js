@@ -62,7 +62,7 @@ app.put("/bands/:id", async (req, res) => {
     res.json(bands);
 });
 
-app.delete("/musicians/:id", async (req, res) => {
+app.delete("/bands/:id", async (req, res) => {
     const updatedBand = await Band.destroy({where: {id: req.params.id}});
     const bands = await Band.findAll();
     res.json(bands);
