@@ -17,7 +17,25 @@ app.get("/musicians/:id", async (req, res) => {
     }
     const findMusician = await Musician.findByPk(req.params.id);
     res.json(findMusician);
-}); 
+});
+
+app.post("/musicians", async (req, res) => {
+    const musician = await Musician.create(req.body);
+    const musicians = await Musician.findAll();
+    res.json(musicians);
+});
+
+app.put("/musicians/:id", async (req, res) => {
+    const updatedMusician = await Musician.update(req.body, {where: {id: req.params.id}});
+    const musicians = await Musician.findAll();
+    res.json(musicians);
+});
+
+app.delete("/musicians/:id", async (req, res) => {
+    const deletedMusician = await Musician.destroy({where: {id: req.params.id}});
+    const musicians = await Musician.findAll();
+    res.json(musicians);
+});  
 
 app.get("/bands", async (req, res) => {
     const everyBand = await Band.findAll();
@@ -30,6 +48,24 @@ app.get("/bands/:id", async (req, res) => {
     }
     const findBand = await Band.findByPk(req.params.id);
     res.json(findBand);
+});
+
+app.post("/bands", async (req, res) => {
+    const band = await Band.create(req.body);
+    const bands = await Band.findAll();
+    res.json(bands);
+});
+
+app.put("/bands/:id", async (req, res) => {
+    const updatedBand = await Band.update(req.body, {where: {id: req.params.id}});
+    const bands = await Band.findAll();
+    res.json(bands);
+});
+
+app.delete("/musicians/:id", async (req, res) => {
+    const updatedBand = await Band.destroy({where: {id: req.params.id}});
+    const bands = await Band.findAll();
+    res.json(bands);
 });
 
 module.exports = app;
