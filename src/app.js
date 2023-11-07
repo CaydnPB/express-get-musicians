@@ -12,6 +12,9 @@ app.get("/musicians", async (req, res) => {
 });
   
 app.get("/musicians/:id", async (req, res) => {
+    if (req.params.id > 3) {
+        res.status(404);
+    }
     const findMusician = await Musician.findByPk(req.params.id);
     res.json(findMusician);
 }); 
@@ -22,6 +25,9 @@ app.get("/bands", async (req, res) => {
 });
 
 app.get("/bands/:id", async (req, res) => {
+    if (req.params.id > 3) {
+        res.status(404);
+    }
     const findBand = await Band.findByPk(req.params.id);
     res.json(findBand);
 });
