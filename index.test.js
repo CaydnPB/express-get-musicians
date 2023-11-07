@@ -55,12 +55,12 @@ describe('./bands endpoint', () => {
     });
     it("to return a single band for a valid ID", async () => {
         const bandId = 3;
-        const response = await request(app).get(`/musicians/${bandId}`);
+        const response = await request(app).get(`/bands/${bandId}`);
         expect(response.statusCode).toBe(200);
     });
     it("to return a 404 status code for an invalid ID", async () => {
         const nonExistentBandId = 999;
-        const response = await request(app).get(`/musicians/${nonExistentBandId}`);
+        const response = await request(app).get(`/bands/${nonExistentBandId}`);
         expect(response.statusCode).toBe(404);
     });
 });
