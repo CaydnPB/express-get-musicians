@@ -5,7 +5,7 @@ const seedMusician = [
     },
     {
       name: 'Drake',
-      instrument: 'Voice',
+      instrument: 'Voice'
     },
     {
       name: 'Jimi Hendrix',
