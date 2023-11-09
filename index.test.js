@@ -45,13 +45,54 @@ describe('./musicians endpoint', () => {
             .send(newMusician);
         const createdMusician = response.body.find(m => m.name === newMusician.name);
     });
-    it("cannot create with empty fields", async () => {
+    it("doesn't accept short field lengths", async () => {
         const response = await request(app)
-          .post('/musicians')
-          .send({});
+            .post('/musicians')
+            .send({
+                name: 'J',
+                instrument: 'Guitar'
+            });
+        expect(response.statusCode).toBe(200);
         expect(response.body).toHaveProperty('error');
-        expect(response.body.error).toBeInstanceOf(Array);
-      });
+        expect(response.body.error[0].msg).toBe("Parameters must be between 2 and 20 characters");
+    });
+    it("doesn't accept long field lengths", async () => {
+        const response = await request(app)
+            .post('/musicians')
+            .send({
+                name: 'John Doe',
+                instrument: 'ThisIsAReallyLongInstrumentName'
+            });
+        expect(response.statusCode).toBe(200);
+        expect(response.body).toHaveProperty('error');
+        expect(response.body.error[0].msg).toBe("Parameters must be between 2 and 20 characters");
+    });
+    it("doesn't accept short and long field lengths", async () => {
+        const response = await request(app)
+            .post('/musicians')
+            .send({
+                name: 'J',
+                instrument: 'ThisIsAReallyLongInstrumentName'
+            });
+        expect(response.statusCode).toBe(200);
+        expect(response.body).toHaveProperty('error');
+        expect(response.body.error).toHaveLength(2);
+        expect(response.body.error[0].msg).toBe("Parameters must be between 2 and 20 characters");
+        expect(response.body.error[1].msg).toBe("Parameters must be between 2 and 20 characters");
+    });
+    it("doesn't accept long and short field lengths", async () => {
+        const response = await request(app)
+            .post('/musicians')
+            .send({
+                name: 'ThisIsAReallyLongMusicianName',
+                instrument: 'G'
+            });
+        expect(response.statusCode).toBe(200);
+        expect(response.body).toHaveProperty('error');
+        expect(response.body.error).toHaveLength(2);
+        expect(response.body.error[0].msg).toBe("Parameters must be between 2 and 20 characters");
+        expect(response.body.error[1].msg).toBe("Parameters must be between 2 and 20 characters");
+    });
     it("to update an existing musician", async () => {
         const musicianId = 1;
         const updatedMusicianData = {

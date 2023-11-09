@@ -17,7 +17,9 @@ musiciansRouter.get("/:id", async (req, res) => {
     res.json(findMusician);
 });
 
-musiciansRouter.post("/", [check(["name", "instrument"]).not().isEmpty().trim()], async (req, res) => {
+musiciansRouter.post("/", [
+    check(["name", "instrument"]).isLength({ min: 2, max: 20 }).withMessage("Parameters must be between 2 and 20 characters")
+], async (req, res) => {
     const errors = validationResult(req);
     if(!errors.isEmpty()){
         res.json({error: errors.array()})
@@ -29,10 +31,17 @@ musiciansRouter.post("/", [check(["name", "instrument"]).not().isEmpty().trim()]
     }
 });
 
-musiciansRouter.put("/:id", async (req, res) => {
-    const updatedMusician = await Musician.update(req.body, {where: {id: req.params.id}});
-    const musicians = await Musician.findAll();
-    res.json(musicians);
+musiciansRouter.put("/:id", [
+    check(["name", "instrument"]).isLength({ min: 2, max: 20 }).withMessage("Parameters must be between 2 and 20 characters")
+], async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        res.json({ error: errors.array() });
+    } else {
+        const updatedMusician = await Musician.update(req.body, { where: { id: req.params.id } });
+        const musicians = await Musician.findAll();
+        res.json(musicians);
+    }
 });
 
 musiciansRouter.delete("/:id", async (req, res) => {
