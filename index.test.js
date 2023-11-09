@@ -35,7 +35,7 @@ describe('./musicians endpoint', () => {
         const response = await request(app).get(`/musicians/${nonExistentMusicianId}`);
         expect(response.statusCode).toBe(404);
     });
-    it('to create a new musician', async () => {
+    it("to create a new musician", async () => {
         const newMusician = {
             name: "John Doe",
             instrument: "Guitar",
@@ -45,6 +45,13 @@ describe('./musicians endpoint', () => {
             .send(newMusician);
         const createdMusician = response.body.find(m => m.name === newMusician.name);
     });
+    it("cannot create with empty fields", async () => {
+        const response = await request(app)
+          .post('/musicians')
+          .send({});
+        expect(response.body).toHaveProperty('error');
+        expect(response.body.error).toBeInstanceOf(Array);
+      });
     it("to update an existing musician", async () => {
         const musicianId = 1;
         const updatedMusicianData = {
